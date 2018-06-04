@@ -1,0 +1,98 @@
+<html>
+  <head>
+    <title>IPv4 Lookup Tool</title>
+    <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+    <script>
+      $.ajax({
+        method: "GET",
+        url: "http://google.com",
+        success: function (result) {
+          console.log(result);
+        },
+        error: function(XMLHttpRequest, textStatus, err) {
+          console.log(err);
+        }
+      });
+      function reloadIframe(el) {
+        //$("#addrs").attr("src", function (i,v){return v;});
+        document.getElementById(el).contentWindow.location.reload(true);
+      }
+      function filterAddrs() {
+        $.ajax({
+          method: "POST",
+          url: "{{ url_for('filter') }}",
+          data: JSON.stringify({"filter": $("#filt").val()}),
+          success: function (result) {
+            setTimeout(function(){
+              reloadIframe('addrs');
+            }, 100);
+          },
+          error: function(XMLHttpRequest, textStatus, err) {
+            console.log(err);
+          }
+        })
+      }
+      function resetFilter() {
+        $.ajax({
+          method: "POST",
+          url: "{{ url_for('reset_filter') }}",
+          success: function (result) {
+            setTimeout(function(){
+              reloadIframe('addrs');
+            }, 100);
+          }
+        })
+      }
+      function geoipLookup() {
+        $.ajax({
+          method: "POST",
+          url: "{{ url_for('geoip_lookup') }}",
+          success: function(result) {
+            setTimeout(function(){
+              reloadIframe('addrs');
+            }, 1000);
+          }
+        })
+      }
+      function rdapLookup() {
+        $.ajax({
+          method: "POST",
+          url: "{{ url_for('rdap_lookup') }}",
+          success: function(result) {
+            setTimeout(function(){
+              reloadIframe('addrs');
+            }, 1000);
+          }
+        })
+      }
+    </script>
+  </head>
+  <body>
+    Hello, and welcome to my IPv4 lookup tool.<br />
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      Please begin by uploading a file containing IPv4 addresses:<br /><br />
+      <input type="file" name="file">
+      <input type="submit">
+    </form><br />
+    You can filter the addresses displayed using a simple, custom query language detailed below.
+    You can also reset the filtered addresses using the Reset button.<br />
+    <ul>
+      <li>contains (ex. "contains 172.10")</li>
+      <li>startsWith (ex. "startsWith 172")</li>
+      <li>endsWith (ex. "endsWith 255")</li>
+      <li>greaterThan (ex. "greaterThan 172.10.20.255")</li>
+      <li>lessThan (ex. "lessThan 172.10.20.255")</li>
+    </ul>
+    
+    <input type="text" name="filt" id="filt" /><button onclick="filterAddrs()">Filter</button>
+    <button onclick="resetFilter()">Reset</button>
+    <br /><br /><br />
+
+    You can perform GeoIP and RDAP lookups on the addresses displayed below, using the respective buttons.<br />
+    Please filter your results before performing the lookups, to avoid battering the API endpoints or exhausting the GeoIP lookup quota(1500/day).<br />
+    <button onclick="geoipLookup()">GeoIP</button>
+    <button onclick="rdapLookup()">RDAP</button><br /><br />
+
+    <iframe height="500" width="500" name="addrs" id="addrs" src="{{ url_for('addrs_frame') }}" />
+  </body>
+</html>

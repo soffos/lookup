@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Addresses</title>
+  </head>
+  <body>
+    {% for addr in session['dispAddrs'] %}
+      <b>{{addr['ipv4']}}</b><br />
+      {% if 'geoip' in addr %}
+        <ul>
+          {% for k,v in addr['geoip'].items() %}
+            <li>{{k}}: {{v}}</li>
+          {% endfor %}
+        </ul>
+      {% elif 'rdap' in addr %}
+        <ul>
+        {% for k,v in addr['rdap'].items() %}
+          <li>{{k}}: {{v}}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endfor %}
+  </body>
+</html>
