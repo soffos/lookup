@@ -3,16 +3,6 @@
     <title>IPv4 Lookup Tool</title>
     <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
     <script>
-      $.ajax({
-        method: "GET",
-        url: "http://google.com",
-        success: function (result) {
-          console.log(result);
-        },
-        error: function(XMLHttpRequest, textStatus, err) {
-          console.log(err);
-        }
-      });
       function reloadIframe(el) {
         //$("#addrs").attr("src", function (i,v){return v;});
         document.getElementById(el).contentWindow.location.reload(true);
@@ -89,7 +79,7 @@
     <br /><br /><br />
 
     You can perform GeoIP and RDAP lookups on the addresses displayed below, using the respective buttons.<br />
-    Please filter your results before performing the lookups, to avoid battering the API endpoints or exhausting the GeoIP lookup quota(1500/day).<br />
+    Please filter your results before performing the lookups, to avoid battering the API endpoints or exhausting the GeoIP lookup quota (1500/day).<br />
     <button onclick="geoipLookup()">GeoIP</button>
     <button onclick="rdapLookup()">RDAP</button><br /><br />
 
