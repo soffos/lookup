@@ -8,4 +8,4 @@ python setup.py install
 ```
 
 ## Setup
-In order to run the program, execute run.py. A webpage will be availabe at `http://localhost:5000` for you to interact with it.
+In order to run the program, execute `run.py`. A webpage will be availabe at `http://localhost:5000` for you to interact with it.
